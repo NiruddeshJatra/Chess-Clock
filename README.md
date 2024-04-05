@@ -1,57 +1,61 @@
-# PyQt6 Calculator
+# Chess Clock App
 
-This is a simple calculator application implemented using PyQt6. The calculator provides a user-friendly interface for performing basic mathematical operations.
+This is a chess clock application developed using PyQt6. The application offers features for managing chess matches, including creating profiles, displaying profiles, viewing match history, and checking rankings. It is integrated with a MySQL database to store player information and match data.
 
 ## Features
-- Supports addition, subtraction, multiplication, and division.
-- Provides functions for calculating square root, cube root, logarithm, and trigonometric functions (sine).
-- Allows input of constants like pi and the Euler number (e).
-- Provides error handling for invalid mathematical expressions.
-- Stylish and intuitive user interface.
+- **Profile Management**: Create and display player profiles with relevant details.
+- **Match History**: View match history and performance statistics.
+- **Ranking**: Check player rankings based on performance.
+- **Game Setup**: Choose the game type and enter players' names before starting a match.
+- **Match Timer**: Timer starts when players confirm names and game type.
+- **Game Controls**: Buttons for actions such as declaring checkmate, draw, or resignation.
+- **Winner Declaration**: Another window pops up after match ends to declare the winner.
 
 ## Requirements
-- Python 3.6 or higher
+- Python 3.x
 - PyQt6 library
-- qdarkstyle library
+- MySQL server
 
 ## Installation
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/NiruddeshJatra/PyQt6-Tutorials.git
+    git clone https://github.com/your_username/chess-clock-app.git
     ```
 
-2. Navigate to the Py Calculator directory:
+2. Install dependencies:
 
     ```bash
-    cd PyQt6-Tutorials/Py Calculator
-    ```
-
-3. Install the required dependencies:
-
-    ```bash
-    pip install PyQt6 qdarkstyle
+    pip install PyQt6 mysql-connector-python
     ```
 
 ## Usage
-Run the `PyCalc.py` script to launch the calculator application:
+1. Navigate to the project directory.
 
-```bash
-python PyCalc.py
-```
+2. Run the main Python script:
+
+    ```bash
+    python main.py
+    ```
+
+3. In the main window, click on buttons to create profile, view stats, or check rankings. Choose game type and enter player names to start a match.
+
+4. Timer starts when players confirm names and game type. Use buttons for game controls during the match.
+
+5. After match ends, a winner declaration window appears.
 
 ## Screenshots
-Include screenshots or GIFs demonstrating the usage and interface of your calculator.
+Include screenshots or GIFs demonstrating the usage and interface of your chess clock app.
 
 ## Acknowledgments
-- This calculator application is based on the PyQt6 tutorials by Niruddesh Jatra.
-- Special thanks to the contributors and maintainers of PyQt6 and qdarkstyle libraries.
+- This chess clock application is inspired by PyQt6 tutorials and utilizes MySQL database integration.
+- Special thanks to PyQt6 developers and MySQL maintainers for their contributions.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Authors
+## Author
 - Nasiful Alam
 
 ## Contributions
-Contributions are welcome! Feel free to submit bug reports, feature requests, or pull requests to improve this calculator application.
+Contributions are welcome! Feel free to submit bug reports, feature requests, or pull requests to enhance the chess clock application.
