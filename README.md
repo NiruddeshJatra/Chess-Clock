@@ -45,7 +45,11 @@ This is a chess clock application developed using PyQt6. The application offers 
 5. After match ends, a winner declaration window appears.
 
 ## Screenshots
-Include screenshots or GIFs demonstrating the usage and interface of your chess clock app.
+![Main Window](Screenshots/main_window.png)
+![Player Window](Screenshots/player_window.png)
+![Timer Window](Screenshots/timer_window.png)
+![Ranking Window](Screenshots/ranking_window.png)
+![Statistics Window](Screenshots/stats_window.png)
 
 ## Acknowledgments
 - This chess clock application is inspired by PyQt6 tutorials and utilizes MySQL database integration.
