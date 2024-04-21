@@ -94,9 +94,9 @@ class UiProfileWindow(QMainWindow):
         
         
     def addProfile(self):
-        profile = self.name.text().lower()
+        profileName = self.name.text().lower()
         
-        if profile == "":
+        if profileName == "":
             self.name.setStyleSheet("""
                 background-color:rgb(162, 241, 120);
                 border: 1px solid red;
@@ -110,7 +110,7 @@ class UiProfileWindow(QMainWindow):
             self.c.execute("SELECT Username FROM profile")
             profiles = [profile[0] for profile in self.c.fetchall()]
             
-            if profile in profiles:
+            if profileName in profiles:
                 self.name.setStyleSheet("""
                     background-color:rgb(162, 241, 120);
                     border: 1px solid red;
@@ -124,7 +124,7 @@ class UiProfileWindow(QMainWindow):
             else:
                 self.c.execute("""
                     INSERT INTO profile (Username, Match_played, Won, Draw, Lost, Rating)
-                    VALUES (%s, 0, 0, 0, 0, 1000)", (profile.lower(),)
+                    VALUES (%s, 0, 0, 0, 0, 1000)", (profileName,)
                 """)
                 self.mydb.commit()
                 self.mydb.close()
@@ -142,4 +142,5 @@ class UiProfileWindow(QMainWindow):
         font.setBold(True)
         msg.setFont(font)
         msg.exec()
+        
         

@@ -279,7 +279,9 @@ class UiTimerWindow(QMainWindow):
             self.winner = self.white
         else:
             self.winner = self.black
-            
+        
+        self.timer1.stop()    
+        self.timer2.stop()    
         self.openCongratulationWindow()
         
         
@@ -290,6 +292,8 @@ class UiTimerWindow(QMainWindow):
         else:
             self.winner = self.black 
         
+        self.timer1.stop()    
+        self.timer2.stop()
         self.openCongratulationWindow()
         
         
@@ -297,6 +301,8 @@ class UiTimerWindow(QMainWindow):
         self.winningMethod = "Draw"
         self.winner = "Nobody"
         
+        self.timer1.stop()    
+        self.timer2.stop()
         self.openCongratulationWindow()
         
         

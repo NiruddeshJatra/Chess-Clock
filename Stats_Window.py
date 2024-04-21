@@ -42,11 +42,11 @@ class ChessStatisticsBar(QWidget):
         painter.setFont(font)
         painter.setPen(Qt.GlobalColor.black)
         if winWidth:
-            painter.drawText(self.xPos + 105, self.yPos + 45, f"Win {self.winPercentage}%")
+            painter.drawText(self.xPos + 105, self.yPos + 45, f"Win {self.winPercentage:.2f}%")
         if drawWidth:
-            painter.drawText(self.xPos + winWidth + 155, self.yPos + 45, f"Draw {self.drawPercentage}%")
+            painter.drawText(self.xPos + winWidth + 155, self.yPos + 45, f"Draw {self.drawPercentage:.2f}%")
         if loseWidth:
-            painter.drawText(self.xPos + winWidth + drawWidth + 205, self.yPos + 45, f"Lose {self.losePercentage}%")
+            painter.drawText(self.xPos + winWidth + drawWidth + 205, self.yPos + 45, f"Lose {self.losePercentage:.2f}%")
         
         
         
