@@ -8,13 +8,14 @@ import sys
 
 
 class ChessStatisticsBar(QWidget):
-    def __init__(self, xPos, yPos, winPercentage, drawPercentage, losePercentage):
+    def __init__(self, xPos, yPos, percentage1, percentage2, percentage3, causes):
         super().__init__()
         self.xPos = xPos
         self.yPos = yPos
-        self.winPercentage = winPercentage
-        self.drawPercentage = drawPercentage
-        self.losePercentage = losePercentage
+        self.percentage1 = percentage1
+        self.percentage2 = percentage2
+        self.percentage3 = percentage3
+        self.causes = causes
     
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -23,30 +24,30 @@ class ChessStatisticsBar(QWidget):
         totalWidth = 400
         totalHeight = 10
         
-        winWidth = int(totalWidth * self.winPercentage / 100)
-        drawWidth = int(totalWidth * self.drawPercentage / 100)
-        loseWidth = int(totalWidth * self.losePercentage / 100)
+        width1 = int(totalWidth * self.percentage1 / 100)
+        width2 = int(totalWidth * self.percentage2 / 100)
+        width3 = int(totalWidth * self.percentage3 / 100)
         
         # Draw win portion
-        painter.fillRect(self.xPos + 100, self.yPos + 20, winWidth, totalHeight, Qt.GlobalColor.green)
+        painter.fillRect(self.xPos + 100, self.yPos + 20, width1, totalHeight, Qt.GlobalColor.green)
         
         # Draw draw portion
-        painter.fillRect(self.xPos + 100 + winWidth, self.yPos + 20, drawWidth, totalHeight, Qt.GlobalColor.gray)
+        painter.fillRect(self.xPos + 100 + width1, self.yPos + 20, width2, totalHeight, Qt.GlobalColor.gray)
         
         # Draw lose portion
-        painter.fillRect(self.xPos + 100 + winWidth + drawWidth, self.yPos + 20, loseWidth, totalHeight, Qt.GlobalColor.red)
+        painter.fillRect(self.xPos + 100 + width1 + width2, self.yPos + 20, width3, totalHeight, Qt.GlobalColor.red)
         
         # Draw text labels
         font = QFont("Gill Sans Nova Light", 8)
         font.setBold(True)
         painter.setFont(font)
         painter.setPen(Qt.GlobalColor.black)
-        if winWidth:
-            painter.drawText(self.xPos + 105, self.yPos + 45, f"Win {self.winPercentage:.2f}%")
-        if drawWidth:
-            painter.drawText(self.xPos + winWidth + 155, self.yPos + 45, f"Draw {self.drawPercentage:.2f}%")
-        if loseWidth:
-            painter.drawText(self.xPos + winWidth + drawWidth + 205, self.yPos + 45, f"Lose {self.losePercentage:.2f}%")
+        if width1:
+            painter.drawText(self.xPos + 105, self.yPos + 45, f"{self.causes[0]} {self.percentage1:.2f}%")
+        if width2:
+            painter.drawText(self.xPos + width1 + 135, self.yPos + 45, f"{self.causes[1]} {self.percentage2:.2f}%")
+        if width3:
+            painter.drawText(self.xPos + 455, self.yPos + 45, f"{self.causes[2]} {self.percentage3:.2f}%")
         
         
         
@@ -54,24 +55,20 @@ class UiStatsWindow(QMainWindow):
     def __init__(self, name):
         super().__init__()
         self.name = name
-        self.won = 0
-        self.lost = 0
-        self.draw = 0
-        self.totalPlayed = 0
 
         self.loadBaseUi()
         self.loadDatabase()
         self.showProfileStats()        
         self.showAsWhiteStats()
         self.showAsBlackStats()
-        #self.showWinStats()
-        #self.showLoseStats()
+        self.showWinStats()
+        self.showLoseStats()
         self.showMatchHistory()
         
         
     def loadBaseUi(self):
         self.setWindowTitle("Statistics")
-        self.setFixedSize(650, 600)
+        self.setFixedSize(650, 700)
         icon = QIcon()
         icon.addPixmap(QPixmap("Icons/chess-clock.svg"))
         self.setWindowIcon(icon)
@@ -147,19 +144,20 @@ class UiStatsWindow(QMainWindow):
         self.generalLayout.addLayout(self.gridLayout)
         
         
-    def createBar(self, xPos, yPos):
-        winPercentage = (self.won / self.totalPlayed) * 100
-        losePercentage = (self.lost / self.totalPlayed) * 100
-        drawPercentage = 100 - (winPercentage + losePercentage)
+    def createBar(self, xPos, yPos, cause1, cause2, cause3, causes):
+        total = cause1 + cause2 + cause3
+        percentage1 = (cause1 / total) * 100
+        percentage3 = (cause2 / total) * 100
+        percentage2 = 100 - (percentage1 + percentage3)
         
-        self.statisticsBar = ChessStatisticsBar(xPos, yPos, winPercentage, drawPercentage, losePercentage)
+        self.statisticsBar = ChessStatisticsBar(xPos, yPos, percentage1, percentage2, percentage3, causes)
         self.generalLayout.addWidget(self.statisticsBar)
         
         
     def showAsWhiteStats(self):
         self.whiteLabel = QLabel("Played As White")
-        self.whiteLabel.setContentsMargins(35, 5, 10, 0)
-        font = QFont("Georgia Pro Black", 24)
+        self.whiteLabel.setContentsMargins(35, 5, 5, 0)
+        font = QFont("Georgia Pro Black", 20)
         font.setBold(True)
         self.whiteLabel.setFont(font)
         self.whiteLabel.setStyleSheet("")
@@ -168,21 +166,20 @@ class UiStatsWindow(QMainWindow):
         self.generalLayout.addWidget(self.whiteLabel)
         
         self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE White = %s AND White = Won", (self.name,))
-        self.won = self.c.fetchall()[0][0]
+        won = self.c.fetchall()[0][0]
         self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE White = %s AND Black = Won", (self.name,))
-        self.lost = self.c.fetchall()[0][0]
+        lost = self.c.fetchall()[0][0]
         self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE White = %s AND Won = 'Nobody'", (self.name,))
-        self.draw = self.c.fetchall()[0][0]
-        
-        self.totalPlayed = self.won + self.draw + self.lost
-        if self.totalPlayed > 0:
-            self.createBar(self.xPos, self.yPos)
+        draw = self.c.fetchall()[0][0]
+
+        if (won + lost + draw) > 0:
+            self.createBar(self.xPos, self.yPos, won, lost, draw, ["won", "draw", "lost"])
 
         
     def showAsBlackStats(self):
         self.blackLabel = QLabel("Played As Black")
-        self.blackLabel.setContentsMargins(35, 5, 10, 0)
-        font = QFont("Georgia Pro Black", 24)
+        self.blackLabel.setContentsMargins(35, 5, 5, 0)
+        font = QFont("Georgia Pro Black", 20)
         font.setBold(True)
         self.blackLabel.setFont(font)
         self.blackLabel.setStyleSheet("")
@@ -191,21 +188,20 @@ class UiStatsWindow(QMainWindow):
         self.generalLayout.addWidget(self.blackLabel)
         
         self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE Black = %s AND Black = Won", (self.name,))
-        self.won = self.c.fetchall()[0][0]
+        won = self.c.fetchall()[0][0]
         self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE Black = %s AND White = Won", (self.name,))
-        self.lost = self.c.fetchall()[0][0]
+        lost = self.c.fetchall()[0][0]
         self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE Black = %s AND Won = 'Nobody'", (self.name,))
-        self.draw = self.c.fetchall()[0][0]
+        draw = self.c.fetchall()[0][0]
         
-        self.totalPlayed = self.won + self.draw + self.lost
-        if self.totalPlayed > 0:
-            self.createBar(self.xPos, self.yPos)
+        if (won + lost + draw) > 0:
+            self.createBar(self.xPos, self.yPos, won, lost, draw, ["won", "draw", "lost"])
         
         
     def showWinStats(self):
         self.winLabel = QLabel("Winning Methods")
-        self.winLabel.setContentsMargins(15, 5, 10, 0)
-        font = QFont("Georgia Pro Black", 24)
+        self.winLabel.setContentsMargins(35, 5, 5, 0)
+        font = QFont("Georgia Pro Black", 20)
         font.setBold(True)
         self.winLabel.setFont(font)
         self.winLabel.setStyleSheet("")
@@ -214,21 +210,20 @@ class UiStatsWindow(QMainWindow):
         self.generalLayout.addWidget(self.winLabel)
         
         self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE Won = %s AND Cause = 'Resignation'", (self.name,))
-        self.won = self.c.fetchall()[0][0]
+        resignation = self.c.fetchall()[0][0]
         self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE Won = %s AND Cause = 'Checkmate'", (self.name,))
-        self.lost = self.c.fetchall()[0][0]
-        self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE Won = %s AND Cause = 'Timeout'", (self.name,))
-        self.draw = self.c.fetchall()[0][0]
+        checkmate = self.c.fetchall()[0][0]
+        self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE Won = %s AND Cause = 'Time'", (self.name,))
+        timeout = self.c.fetchall()[0][0]
         
-        self.totalPlayed = self.won + self.draw + self.lost
-        if self.totalPlayed > 0:
-            self.createBar(self.xPos, self.yPos)
+        if (resignation + checkmate + timeout) > 0:
+            self.createBar(self.xPos, self.yPos, resignation, timeout, checkmate, ["resignation", "checkmate", "timeout"])
         
         
     def showLoseStats(self):
         self.loseLabel = QLabel("Losing Methods")
-        self.loseLabel.setContentsMargins(15, 5, 10, 0)
-        font = QFont("Georgia Pro Black", 24)
+        self.loseLabel.setContentsMargins(35, 5, 5, 0)
+        font = QFont("Georgia Pro Black", 20)
         font.setBold(True)
         self.loseLabel.setFont(font)
         self.loseLabel.setStyleSheet("")
@@ -236,16 +231,15 @@ class UiStatsWindow(QMainWindow):
         self.yPos = self.loseLabel.pos().y()
         self.generalLayout.addWidget(self.loseLabel)
         
-        self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE Won = %s AND Cause = 'Resignation'", (self.name,))
-        self.won = self.c.fetchall()[0][0]
-        self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE Won = %s AND Cause = 'Checkmate'", (self.name,))
-        self.lost = self.c.fetchall()[0][0]
-        self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE Won = %s AND Cause = 'Timeout'", (self.name,))
-        self.draw = self.c.fetchall()[0][0]
+        self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE (White = %s OR Black = %s) AND Won != %s AND Cause = 'Resignation'", (self.name,self.name,self.name,))
+        resignation = self.c.fetchall()[0][0]
+        self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE (White = %s OR Black = %s) AND Won != %s AND Cause = 'Checkmate'", (self.name,self.name,self.name,))
+        checkmate = self.c.fetchall()[0][0]
+        self.c.execute("SELECT COUNT(Match_type) FROM match_history WHERE (White = %s OR Black = %s) AND Won != %s AND Cause = 'Time'", (self.name,self.name,self.name,))
+        timeout = self.c.fetchall()[0][0]
         
-        self.totalPlayed = self.won + self.draw + self.lost
-        if self.totalPlayed > 0:
-            self.createBar(self.xPos, self.yPos)
+        if (resignation + checkmate + timeout) > 0:
+            self.createBar(self.xPos, self.yPos, resignation, timeout, checkmate, ["resignation", "checkmate", "timeout"])
 
 
     def openMatchHistoryWindow(self):

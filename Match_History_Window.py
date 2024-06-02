@@ -14,7 +14,8 @@ class UiMatchHistoryWindow(QMainWindow):
         self.loadBaseUi()
         self.loadDatabase()
         self.loadHistory()
-        
+        self.showRecent()
+        self.showOlder()
         
     def loadBaseUi(self):
         self.setWindowTitle("Match History")
@@ -31,6 +32,9 @@ class UiMatchHistoryWindow(QMainWindow):
         self.centralwidget.setStyleSheet("")
         self.centralwidget.setObjectName("centralwidget")
         self.setCentralWidget(self.centralwidget)
+        self.generalLayout = QVBoxLayout(self.centralwidget)
+        self.generalLayout.setContentsMargins(0, 0, 0, 0)
+        self.centralwidget.setLayout(self.generalLayout)
         
         
     def loadDatabase(self):
@@ -80,8 +84,65 @@ class UiMatchHistoryWindow(QMainWindow):
                     self.label.setText(str(self.result[row-1][col]))
                     
                 self.gridLayout.addWidget(self.label, row, col)
+                self.generalLayout.addLayout(self.gridLayout)
         
         self.c.close()
         self.mydb.close()
                 
-        self.setFixedSize(880, 35*(len(self.result) + 1))
+        self.setFixedSize(880, 35*(len(self.result) + 1) + 100)
+        
+        
+    def showRecent(self):
+        self.recentButton = QPushButton("Recent")
+        self.recentButton.setGeometry(QRect(215, 35*(len(self.result) + 1) + 50, 220, 40))
+        font = QFont("Algerian", 12)
+        self.recentButton.setFont(font)
+        self.recentButton.setStyleSheet("""
+			QPushButton {
+				background-color:rgb(169, 255, 8);
+				border: 1px solid rgb(85, 255, 127);
+				border-radius: 10px;
+                margin-left: 220px;
+                margin-right: 220px;
+                margin-bottom: 25px;
+				padding: 10px 20px;
+				color: rgb(25, 33, 19);
+			}
+			QPushButton:hover {
+				background-color: #ffff00;
+				color: rgb(0, 0, 0);
+			}
+        """)
+        
+        self.recentButton.enterEvent = lambda event: self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.recentButton.leaveEvent = lambda event: self.setCursor(Qt.CursorShape.ArrowCursor)
+        self.recentButton.clicked.connect(self.loadHistory)
+        self.generalLayout.addWidget(self.recentButton)
+        
+        
+    def showOlder(self):
+        self.olderButton = QPushButton("Recent")
+        self.olderButton.setGeometry(QRect(655, 35*(len(self.result) + 1) + 50, 220, 40))
+        font = QFont("Algerian", 12)
+        self.olderButton.setFont(font)
+        self.olderButton.setStyleSheet("""
+			QPushButton {
+				background-color:rgb(169, 255, 8);
+				border: 1px solid rgb(85, 255, 127);
+				border-radius: 10px;
+                margin-left: 220px;
+                margin-right: 220px;
+                margin-bottom: 25px;
+				padding: 10px 20px;
+				color: rgb(25, 33, 19);
+			}
+			QPushButton:hover {
+				background-color: #ffff00;
+				color: rgb(0, 0, 0);
+			}
+        """)
+        
+        self.olderButton.enterEvent = lambda event: self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.olderButton.leaveEvent = lambda event: self.setCursor(Qt.CursorShape.ArrowCursor)
+        self.olderButton.clicked.connect(self.loadHistory)
+        self.generalLayout.addWidget(self.olderButton)
