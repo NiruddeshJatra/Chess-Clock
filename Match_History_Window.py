@@ -63,7 +63,7 @@ class UiMatchHistoryWindow(QMainWindow):
         
         
     def loadHistory(self):
-        self.c.execute("SELECT Match_date, White, White_rating, Black, Black_rating, Match_type, Won, Cause, Moves FROM match_history WHERE White = %s OR Black = %s ORDER BY Match_date DESC LIMIT 10 OFFSET %s", (self.name, self.name, self.next,))
+        self.c.execute("SELECT Match_date, White, White_rating, Black, Black_rating, Match_type, Won, Cause, Moves FROM match_history WHERE White = %s OR Black = %s ORDER BY match_id DESC LIMIT 10 OFFSET %s", (self.name, self.name, self.next,))
         self.result = self.c.fetchall()
 
         if self.isFirstTime == True:
