@@ -180,11 +180,10 @@ class UiTimerWindow(QMainWindow):
         
     def updateTimer1(self):
         self.player1RemainingTime -= 1
-        minutes = self.player1RemainingTime // 60
-        seconds = self.player1RemainingTime % 60
+        minutes, seconds = divmod(self.player1RemainingTime, 60)
         timeStr = f"{minutes:02}:{seconds:02}"
         self.player1Time.display(timeStr)
-        
+
         if self.player1RemainingTime < 0:
             self.timer1.stop()
             self.winner = self.black
@@ -194,8 +193,7 @@ class UiTimerWindow(QMainWindow):
         
     def updateTimer2(self):
         self.player2RemainingTime -= 1
-        minutes = self.player2RemainingTime // 60
-        seconds = self.player2RemainingTime % 60
+        minutes, seconds = divmod(self.player2RemainingTime, 60)
         timeStr = f"{minutes:02}:{seconds:02}"
         self.player2Time.display(timeStr)
 
@@ -275,24 +273,16 @@ class UiTimerWindow(QMainWindow):
         
     def resign(self):
         self.winningMethod = "Resignation"
-        if self.count % 2 == 0:
-            self.winner = self.white
-        else:
-            self.winner = self.black
-        
-        self.timer1.stop()    
-        self.timer2.stop()    
+        self.winner = self.white if self.count % 2 == 0 else self.black
+        self.timer1.stop()
+        self.timer2.stop()
         self.openCongratulationWindow()
         
         
     def checkmate(self):
         self.winningMethod = "Checkmate"
-        if self.count % 2 == 0:
-            self.winner = self.white
-        else:
-            self.winner = self.black 
-        
-        self.timer1.stop()    
+        self.winner = self.white if self.count % 2 == 0 else self.black
+        self.timer1.stop()
         self.timer2.stop()
         self.openCongratulationWindow()
         
@@ -375,8 +365,8 @@ class UiTimerWindow(QMainWindow):
                 self.whiteRating -= self.bonusPoint
                 self.blackRating += self.bonusPoint
             else:
-                self.whiteRating -= self.bonusPoint
-                self.blackRating += self.bonusPoint
+                self.whiteRating += self.bonusPoint
+                self.blackRating -= self.bonusPoint
         
         self.c.execute("UPDATE profile SET Rating = %s WHERE Username = %s", (self.whiteRating, self.white,))
         self.mydb.commit()
