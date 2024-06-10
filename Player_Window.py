@@ -19,9 +19,7 @@ class UiPlayerWindow(QMainWindow):
     def loadBaseUi(self):
         self.setWindowTitle("Entry Player Name")
         self.setFixedSize(315, 250)
-        icon = QIcon()
-        icon.addPixmap(QPixmap("Icons/chess-clock.svg"))
-        self.setWindowIcon(icon)
+        self.setIcon(self)
         self.setStyleSheet("""
             background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(8, 109, 55, 255), stop:1 rgba(63, 206, 112, 255));
 			color: rgb(0, 34, 0);
@@ -116,7 +114,7 @@ class UiPlayerWindow(QMainWindow):
         self.c = self.mydb.cursor()
             
             
-    def openTimerWindow(self):
+    def openTimerWindow(self):  # sourcery skip: extract-method
         if self.player1Name.text() == "":
             self.player1Name.setStyleSheet("""
                 background-color:rgb(162, 241, 120);
@@ -194,19 +192,22 @@ class UiPlayerWindow(QMainWindow):
                 
     def showWarningMessageBox(self, playerNo):
         msg = QMessageBox()
-        icon = QIcon()
-        icon.addPixmap(QPixmap("Icons/chess-clock.svg"))
-        msg.setWindowIcon(icon)
+        self._extracted_from_showWarningMessageBox_4(msg)
         font = QFont("Sitka", 20)
         font.setBold(True)
         msg.setFont(font)
-        
+
         if playerNo == "3":
             msg.setWindowTitle("Invalid!!!")
             msg.setText(f"You can't play with yourself, fool!!\nEnter different Usernames.")
-            msg.exec()
         else:
             msg.setWindowTitle("Not Registered!!!")
             msg.setText(f"Player {playerNo} doesn't exist in the database!\nCreate a Profile first.")
-            msg.exec()
+
+        msg.exec()
+
+    def setIcon(self, arg0):
+        icon = QIcon()
+        icon.addPixmap(QPixmap("Icons/chess-clock.svg"))
+        arg0.setWindowIcon(icon)
 
