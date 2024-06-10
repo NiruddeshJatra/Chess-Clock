@@ -16,10 +16,12 @@ class UiPlayerWindow(QMainWindow):
         self.showStartButton()
         
         
-    def loadBaseUi(self):
+    def loadBaseUi(self):  # sourcery skip: class-extract-method
         self.setWindowTitle("Entry Player Name")
         self.setFixedSize(315, 250)
-        self.setIcon(self)
+        icon = QIcon()
+        icon.addPixmap(QPixmap("Icons/chess-clock.svg"))
+        self.setWindowIcon(icon)
         self.setStyleSheet("""
             background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(8, 109, 55, 255), stop:1 rgba(63, 206, 112, 255));
 			color: rgb(0, 34, 0);
@@ -192,7 +194,9 @@ class UiPlayerWindow(QMainWindow):
                 
     def showWarningMessageBox(self, playerNo):
         msg = QMessageBox()
-        self._extracted_from_showWarningMessageBox_4(msg)
+        icon = QIcon()
+        icon.addPixmap(QPixmap("Icons/chess-clock.svg"))
+        msg.setWindowIcon(icon)
         font = QFont("Sitka", 20)
         font.setBold(True)
         msg.setFont(font)
@@ -205,9 +209,4 @@ class UiPlayerWindow(QMainWindow):
             msg.setText(f"Player {playerNo} doesn't exist in the database!\nCreate a Profile first.")
 
         msg.exec()
-
-    def setIcon(self, arg0):
-        icon = QIcon()
-        icon.addPixmap(QPixmap("Icons/chess-clock.svg"))
-        arg0.setWindowIcon(icon)
 
