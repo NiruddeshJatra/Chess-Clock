@@ -53,7 +53,6 @@ class UiPlayerWindow(QMainWindow):
             border-radius: 5px;
             color: rgb(25, 33, 19);
         """)
-        self.player1Name.returnPressed.connect(self.setFocusToplayer2Name)
         self.generalLayout.addWidget(self.player1Name)
 
         self.player2Label = QLabel("Player 2 - Black")
@@ -76,6 +75,7 @@ class UiPlayerWindow(QMainWindow):
             border-radius: 5px;
             color: rgb(25, 33, 19);
         """)
+        self.player1Name.returnPressed.connect(self.player2Name.setFocus)
         self.player2Name.returnPressed.connect(self.openTimerWindow)
         self.generalLayout.addWidget(self.player2Name)
 
@@ -104,10 +104,6 @@ class UiPlayerWindow(QMainWindow):
         self.startButton.leaveEvent = lambda event: self.setCursor(Qt.CursorShape.ArrowCursor)
         self.startButton.clicked.connect(self.openTimerWindow)
         self.generalLayout.addWidget(self.startButton)
-        
-        
-    def setFocusToplayer2Name(self):
-        self.player2Name.setFocus()
         
 
     def loadDatabase(self):
