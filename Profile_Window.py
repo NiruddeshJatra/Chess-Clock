@@ -122,8 +122,9 @@ class UiProfileWindow(QMainWindow):
             else:
                 self.c.execute("""
                     INSERT INTO profile (Username, Match_played, Won, Draw, Lost, Rating)
-                    VALUES (%s, 0, 0, 0, 0, 1000)", (profileName,)
-                """)
+                    VALUES (%s, 0, 0, 0, 0, 1000)
+                    """, (profileName,)
+                    )
                 self.mydb.commit()
                 self.mydb.close()
                 self.hide()
@@ -133,7 +134,6 @@ class UiProfileWindow(QMainWindow):
         msg = QMessageBox()
         msg.setWindowTitle("Already Created!!!")
         msg.setText("This profile exists in the database!\nEnter another one.")
-        self._extracted_from_showWarningMessageBox_4(msg)
         font = QFont("Sitka", 20)
         font.setBold(True)
         msg.setFont(font)
