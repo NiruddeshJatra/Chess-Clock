@@ -45,7 +45,10 @@ class ChessStatisticsBar(QWidget):
         if width1:
             painter.drawText(self.xPos + 105, self.yPos + 45, f"{self.causes[0]} {self.percentage1:.2f}%")
         if width2:
-            painter.drawText(self.xPos + width1 + 130, self.yPos + 45, f"{self.causes[1]} {self.percentage2:.2f}%")
+            if width1 and width1 < 110:
+                painter.drawText(self.xPos + width1 + 200, self.yPos + 45, f"{self.causes[1]} {self.percentage2:.2f}%")
+            else:
+                painter.drawText(self.xPos + width1 + 110, self.yPos + 45, f"{self.causes[1]} {self.percentage2:.2f}%")
         if width3:
             painter.drawText(self.xPos + 460, self.yPos + 45, f"{self.causes[2]} {self.percentage3:.2f}%")
         
