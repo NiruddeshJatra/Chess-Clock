@@ -112,17 +112,17 @@ class UiMainWindow(QMainWindow):
         icon1 = QIcon()
         icon1.addPixmap(QPixmap("Icons/bullet.png"))
         self.matchType.addItem(icon1, " Bullet: 1 Min")
-        self.matchType.addItem(icon1, " Bullet: 2 Min")
+        self.matchType.addItem(icon1, " Bullet: 2|1 Min")
         
         icon2 = QIcon()
         icon2.addPixmap(QPixmap("Icons/lightning.png"))
-        self.matchType.addItem(icon2, " Blitz: 3 Min")
+        self.matchType.addItem(icon2, " Blitz: 3|2 Min")
         self.matchType.addItem(icon2, " Blitz: 5 Min")
         
         icon3 = QIcon()
         icon3.addPixmap(QPixmap("Icons/rapid.png"))
         self.matchType.addItem(icon3, " Rapid: 10 Min")
-        self.matchType.addItem(icon3, " Rapid: 15 Min")
+        self.matchType.addItem(icon3, " Rapid: 15|10 Min")
         self.matchType.addItem(icon3, " Custom")
         
         self.matchType.activated.connect(self.openPlayerWindow)

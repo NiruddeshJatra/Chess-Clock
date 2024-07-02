@@ -179,11 +179,12 @@ class UiTimerWindow(QMainWindow):
         
         
     def updateTimer1(self):
+        self.updateBorder()
         self.player1RemainingTime -= 1
         minutes, seconds = divmod(self.player1RemainingTime, 60)
         timeStr = f"{minutes:02}:{seconds:02}"
         self.player1Time.display(timeStr)
-
+        
         if self.player1RemainingTime < 0:
             self.timer1.stop()
             self.winner = self.black
@@ -192,10 +193,12 @@ class UiTimerWindow(QMainWindow):
         
         
     def updateTimer2(self):
+        self.updateBorder()
         self.player2RemainingTime -= 1
         minutes, seconds = divmod(self.player2RemainingTime, 60)
         timeStr = f"{minutes:02}:{seconds:02}"
         self.player2Time.display(timeStr)
+        
 
         if self.player2RemainingTime < 0:
             self.timer2.stop()
@@ -206,20 +209,20 @@ class UiTimerWindow(QMainWindow):
         
     def toggleTimer(self):
         if self.count % 2 == 0:
+            if self.time == 120:
+                self.player1RemainingTime += 1
+            elif self.time == 180:
+                self.player1RemainingTime += 2
+            elif self.time == 900:
+                self.player1RemainingTime += 10
+                
+            minutes, seconds = divmod(self.player1RemainingTime, 60)
+            timeStr = f"{minutes:02}:{seconds:02}"
+            self.player1Time.display(timeStr)
+        
             self.timer2.start(self.timerInterval)
             self.timer1.stop()
             self.player1Move.setText(f"Moves: {1+self.count//2}")
-            self.player2Time.setStyleSheet("""
-                background-color: #00813e;
-                border: 2px solid rgb(85, 255, 127);
-                color:  #ffff00;
-            """)
-            
-            self.player1Time.setStyleSheet("""
-                background-color: #00813e;
-                color:  #006800;
-            """
-        )
             
             self.pushButton.setText("B L A C K' S  M O V E")
             self.pushButton.setStyleSheet("""
@@ -233,19 +236,20 @@ class UiTimerWindow(QMainWindow):
 			""")
             
         else:
+            if self.time == 120:
+                self.player2RemainingTime += 1
+            elif self.time == 180:
+                self.player2RemainingTime += 2
+            elif self.time == 900:
+                self.player2RemainingTime += 10
+                
+            minutes, seconds = divmod(self.player2RemainingTime, 60)
+            timeStr = f"{minutes:02}:{seconds:02}"
+            self.player2Time.display(timeStr)
+            
             self.timer1.start(self.timerInterval)
             self.timer2.stop()
             self.player2Move.setText(f"Moves: {1+self.count//2}")
-            self.player1Time.setStyleSheet("""
-                background-color: #00813e;
-                border: 2px solid rgb(85, 255, 127);
-                color:  #ffff00;
-            """)
-
-            self.player2Time.setStyleSheet("""
-                background-color: #00813e;
-                color:  #006800;
-            """)
             
             self.pushButton.setText("W H I T E' S  M O V E")
             self.pushButton.setStyleSheet("""
@@ -259,8 +263,50 @@ class UiTimerWindow(QMainWindow):
 			""")
             
         self.count += 1
+        self.updateBorder()
         
         
+    def updateBorder(self):
+        if self.count % 2 == 0:
+            if (self.time >= 600 and self.player1RemainingTime <= 120) or (self.time >= 180 and self.player1RemainingTime <= 60) or (self.time <= 60 and self.player1RemainingTime <= 20):
+                    self.player1Time.setStyleSheet("""
+                    background-color: #00813e;
+                    border: 1px solid red;
+                    color:  #ffff00;
+                """)
+            else:
+                self.player1Time.setStyleSheet("""
+                    background-color: #00813e;
+                    border: 2px solid rgb(85, 255, 127);
+                    color:  #ffff00;
+                """)
+
+            self.player2Time.setStyleSheet("""
+                background-color: #00813e;
+                color:  #006800;
+            """)
+            
+        else:
+            if (self.time >= 600 and self.player2RemainingTime < 120) or (self.time >= 180 and self.player2RemainingTime < 60) or (self.time >= 60 and self.player2RemainingTime < 20):
+                self.player2Time.setStyleSheet("""
+                background-color: #00813e;
+                border: 1px solid red;
+                color: #ffff00;
+            """)
+            else:
+                self.player2Time.setStyleSheet("""
+                    background-color: #00813e;
+                    border: 2px solid rgb(85, 255, 127);
+                    color: #ffff00;
+                """)
+            
+            self.player1Time.setStyleSheet("""
+                background-color: #00813e;
+                color:  #006800;
+            """
+        )
+                
+                
     def loadDatabase(self):
         self.mydb = mysql.connector.connect(
             host = "localhost",
