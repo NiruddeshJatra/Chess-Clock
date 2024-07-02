@@ -2,6 +2,7 @@ import itertools
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 import sys
 import mysql.connector
 
@@ -10,6 +11,11 @@ import mysql.connector
 class MyLabel(QLabel):
     def __init__(self, text="", hoverText="", parent=None):
         super().__init__(text, parent)
+        
+        self.player = QMediaPlayer()
+        self.audio_output = QAudioOutput()
+        self.player.setAudioOutput(self.audio_output)
+        
         self.text = text
         self.hoverText = hoverText
 
@@ -36,6 +42,10 @@ class UiMatchHistoryWindow(QMainWindow):
         
         
     def loadBaseUi(self):
+        url = QUrl.fromLocalFile('Sound\click.wav')
+        self.player.setSource(url)
+        self.player.play()
+        
         self.setWindowTitle("Match History")
         icon = QIcon()
         icon.addPixmap(QPixmap("Icons/chess-clock.svg"))

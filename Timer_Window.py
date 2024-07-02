@@ -1,6 +1,8 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+import sys
 from Congratulation_Window import UiCongratulationWindow
 import mysql.connector
 
@@ -32,6 +34,12 @@ class UiTimerWindow(QMainWindow):
         self.timerInterval = 1000
         self.player1RemainingTime = self.time
         self.player2RemainingTime = self.time
+        self.firstWarningGiven = False
+        self.lastWarningGiven = False
+        
+        self.player = QMediaPlayer()
+        self.audio_output = QAudioOutput()
+        self.player.setAudioOutput(self.audio_output)
         
         self.loadBaseUi()
         self.showTimerDisplay()
@@ -40,6 +48,7 @@ class UiTimerWindow(QMainWindow):
         
         
     def loadBaseUi(self):
+        self.playSound('Sound\level_up.wav')
         self.setWindowTitle("Timer Window")
         self.setFixedSize(640, 480)
         icon = QIcon()
@@ -49,7 +58,7 @@ class UiTimerWindow(QMainWindow):
             background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(8, 109, 55, 255), stop:1 rgba(63, 206, 112, 255));
             color: rgb(0, 34, 0);
         """)
-        
+
         self.centralwidget = QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
         self.setCentralWidget(self.centralwidget)
@@ -184,8 +193,15 @@ class UiTimerWindow(QMainWindow):
         minutes, seconds = divmod(self.player1RemainingTime, 60)
         timeStr = f"{minutes:02}:{seconds:02}"
         self.player1Time.display(timeStr)
+
+        if (self.time >= 600 and self.player1RemainingTime == 120) or (self.time >= 180 and self.player1RemainingTime == 60) or (self.time >= 60 and self.player1RemainingTime == 20):
+            self.playSound('Sound\low_on_time.wav')
         
+        if (self.time >= 600 and self.player1RemainingTime == 20) or (self.time >= 180 and self.player1RemainingTime == 10) or (self.time >= 60 and self.player1RemainingTime == 5):
+            self.playSound('Sound\last_warning.wav')
+            
         if self.player1RemainingTime < 0:
+            self.playSound('Sound\game_over.wav')
             self.timer1.stop()
             self.winner = self.black
             self.winningMethod = "Time"
@@ -198,9 +214,15 @@ class UiTimerWindow(QMainWindow):
         minutes, seconds = divmod(self.player2RemainingTime, 60)
         timeStr = f"{minutes:02}:{seconds:02}"
         self.player2Time.display(timeStr)
-        
 
+        if (self.time >= 600 and self.player2RemainingTime == 120) or (self.time >= 180 and self.player2RemainingTime == 60) or (self.time >= 60 and self.player2RemainingTime == 20):
+            self.playSound('Sound\low_on_time.wav')
+            
+        if (self.time >= 600 and self.player2RemainingTime == 20) or (self.time >= 180 and self.player2RemainingTime == 10) or (self.time >= 60 and self.player2RemainingTime == 5):
+            self.playSound('Sound\last_warning.wav')
+            
         if self.player2RemainingTime < 0:
+            self.playSound('Sound\game_over.wav')
             self.timer2.stop()
             self.winner = self.white
             self.winningMethod = "Time"
@@ -215,15 +237,17 @@ class UiTimerWindow(QMainWindow):
                 self.player1RemainingTime += 2
             elif self.time == 900:
                 self.player1RemainingTime += 10
-                
+
             minutes, seconds = divmod(self.player1RemainingTime, 60)
             timeStr = f"{minutes:02}:{seconds:02}"
             self.player1Time.display(timeStr)
-        
+
             self.timer2.start(self.timerInterval)
             self.timer1.stop()
             self.player1Move.setText(f"Moves: {1+self.count//2}")
             
+            self.playSound('Sound\move.wav')
+
             self.pushButton.setText("B L A C K' S  M O V E")
             self.pushButton.setStyleSheet("""
                 QPushButton {
@@ -234,7 +258,7 @@ class UiTimerWindow(QMainWindow):
                     color: white;
                     }
 			""")
-            
+
         else:
             if self.time == 120:
                 self.player2RemainingTime += 1
@@ -242,15 +266,15 @@ class UiTimerWindow(QMainWindow):
                 self.player2RemainingTime += 2
             elif self.time == 900:
                 self.player2RemainingTime += 10
-                
+
             minutes, seconds = divmod(self.player2RemainingTime, 60)
             timeStr = f"{minutes:02}:{seconds:02}"
             self.player2Time.display(timeStr)
-            
+
             self.timer1.start(self.timerInterval)
             self.timer2.stop()
             self.player2Move.setText(f"Moves: {1+self.count//2}")
-            
+
             self.pushButton.setText("W H I T E' S  M O V E")
             self.pushButton.setStyleSheet("""
                 QPushButton {
@@ -261,9 +285,15 @@ class UiTimerWindow(QMainWindow):
                     color: black;
                 }
 			""")
-            
+
         self.count += 1
         self.updateBorder()
+
+
+    def playSound(self, arg0):
+        url = QUrl.fromLocalFile(arg0)
+        self.player.setSource(url)
+        self.player.play()
         
         
     def updateBorder(self):
@@ -287,7 +317,7 @@ class UiTimerWindow(QMainWindow):
             """)
             
         else:
-            if (self.time >= 600 and self.player2RemainingTime < 120) or (self.time >= 180 and self.player2RemainingTime < 60) or (self.time >= 60 and self.player2RemainingTime < 20):
+            if (self.time >= 600 and self.player2RemainingTime <= 120) or (self.time >= 180 and self.player2RemainingTime <= 60) or (self.time >= 60 and self.player2RemainingTime <= 20):
                 self.player2Time.setStyleSheet("""
                 background-color: #00813e;
                 border: 1px solid red;

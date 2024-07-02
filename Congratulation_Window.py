@@ -1,12 +1,19 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+import sys
 
 
 
 class UiCongratulationWindow(QMainWindow):
     def __init__(self, winner, winningMethod):
         super().__init__()
+        
+        self.player = QMediaPlayer()
+        self.audio_output = QAudioOutput()
+        self.player.setAudioOutput(self.audio_output)
+        
         self.winner = winner
         
         if winningMethod == "Time":
@@ -23,6 +30,10 @@ class UiCongratulationWindow(QMainWindow):
         
         
     def loadBaseUi(self):
+        url = QUrl.fromLocalFile('Sound\winner.wav')
+        self.player.setSource(url)
+        self.player.play()
+        
         self.setWindowTitle("Congratulations!")
         self.setFixedSize(350, 230)
         icon = QIcon()

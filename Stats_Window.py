@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from Match_History_Window import UiMatchHistoryWindow
 import mysql.connector
 import sys
@@ -60,6 +61,10 @@ class UiStatsWindow(QMainWindow):
     def __init__(self, name):
         super().__init__()
         self.name = name
+        
+        self.player = QMediaPlayer()
+        self.audio_output = QAudioOutput()
+        self.player.setAudioOutput(self.audio_output)
 
         self.loadBaseUi()
         self.loadDatabase()
@@ -72,6 +77,10 @@ class UiStatsWindow(QMainWindow):
         
         
     def loadBaseUi(self):
+        url = QUrl.fromLocalFile('Sound\click.wav')
+        self.player.setSource(url)
+        self.player.play()
+        
         self.setWindowTitle("Statistics")
         self.setFixedSize(650, 700)
         icon = QIcon()

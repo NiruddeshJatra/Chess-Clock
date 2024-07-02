@@ -1,6 +1,8 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+import sys
 from Timer_Window import UiTimerWindow
 import mysql.connector
 
@@ -11,12 +13,20 @@ class UiPlayerWindow(QMainWindow):
         super().__init__()
         self.time = time
         
+        self.player = QMediaPlayer()
+        self.audio_output = QAudioOutput()
+        self.player.setAudioOutput(self.audio_output)
+        
         self.loadBaseUi()
         self.enterUsernames()
         self.showStartButton()
         
         
-    def loadBaseUi(self):  # sourcery skip: class-extract-method
+    def loadBaseUi(self):
+        url = QUrl.fromLocalFile('Sound\level_up.wav')
+        self.player.setSource(url)
+        self.player.play()
+        
         self.setWindowTitle("Entry Player Name")
         self.setFixedSize(315, 250)
         icon = QIcon()
