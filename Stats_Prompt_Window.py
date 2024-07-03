@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
-from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtMultimedia import QSoundEffect
 import sys
 from Stats_Window import UiStatsWindow
 import mysql.connector
@@ -12,10 +12,7 @@ class UiStatsPromptWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         
-        self.player = QMediaPlayer()
-        self.audio_output = QAudioOutput()
-        self.player.setAudioOutput(self.audio_output)
-        
+        self.player = QSoundEffect()
         self.loadBaseUi()
         self.enterUsername()
         self.displayShowButton()

@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
-from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtMultimedia import QSoundEffect
 import sys
 from Congratulation_Window import UiCongratulationWindow
 import mysql.connector
@@ -34,12 +34,7 @@ class UiTimerWindow(QMainWindow):
         self.timerInterval = 1000
         self.player1RemainingTime = self.time
         self.player2RemainingTime = self.time
-        self.firstWarningGiven = False
-        self.lastWarningGiven = False
-        
-        self.player = QMediaPlayer()
-        self.audio_output = QAudioOutput()
-        self.player.setAudioOutput(self.audio_output)
+        self.player = QSoundEffect()
         
         self.loadBaseUi()
         self.showTimerDisplay()
@@ -274,6 +269,8 @@ class UiTimerWindow(QMainWindow):
             self.timer1.start(self.timerInterval)
             self.timer2.stop()
             self.player2Move.setText(f"Moves: {1+self.count//2}")
+            
+            self.playSound('Sound\move.wav')
 
             self.pushButton.setText("W H I T E' S  M O V E")
             self.pushButton.setStyleSheet("""
@@ -290,8 +287,8 @@ class UiTimerWindow(QMainWindow):
         self.updateBorder()
 
 
-    def playSound(self, arg0):
-        url = QUrl.fromLocalFile(arg0)
+    def playSound(self, sound_file):
+        url = QUrl.fromLocalFile(sound_file)
         self.player.setSource(url)
         self.player.play()
         

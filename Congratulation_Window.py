@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
-from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtMultimedia import QSoundEffect
 import sys
 
 
@@ -9,10 +9,6 @@ import sys
 class UiCongratulationWindow(QMainWindow):
     def __init__(self, winner, winningMethod):
         super().__init__()
-        
-        self.player = QMediaPlayer()
-        self.audio_output = QAudioOutput()
-        self.player.setAudioOutput(self.audio_output)
         
         self.winner = winner
         
@@ -25,6 +21,7 @@ class UiCongratulationWindow(QMainWindow):
         else:
             self.winningMethod = "It's a Draw!"
 
+        self.player = QSoundEffect()
         self.loadBaseUi()
         self.showCongrats()
         

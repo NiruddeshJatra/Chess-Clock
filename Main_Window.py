@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
-from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtMultimedia import QSoundEffect
 import sys
 from Player_Window import UiPlayerWindow
 from Profile_Window import UiProfileWindow
@@ -32,10 +32,7 @@ class UiMainWindow(QMainWindow):
         super().__init__()
         self.time = 0
         
-        self.player = QMediaPlayer()
-        self.audio_output = QAudioOutput()
-        self.player.setAudioOutput(self.audio_output)
-        
+        self.player = QSoundEffect()
         self.loadBaseUi()
         self.showLogo()
         self.showTopButtons()
@@ -44,7 +41,7 @@ class UiMainWindow(QMainWindow):
         
         
     def loadBaseUi(self):
-        url = QUrl.fromLocalFile("D:\Python_Codes\PyQt6 Tutorials\Chess Clock\Sound\welcome.wav")
+        url = QUrl.fromLocalFile("Sound\welcome.wav")
         self.player.setSource(url)
         self.player.play()
         

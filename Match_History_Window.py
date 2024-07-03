@@ -2,7 +2,7 @@ import itertools
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
-from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtMultimedia import QSoundEffect
 import sys
 import mysql.connector
 
@@ -11,10 +11,6 @@ import mysql.connector
 class MyLabel(QLabel):
     def __init__(self, text="", hoverText="", parent=None):
         super().__init__(text, parent)
-        
-        self.player = QMediaPlayer()
-        self.audio_output = QAudioOutput()
-        self.player.setAudioOutput(self.audio_output)
         
         self.text = text
         self.hoverText = hoverText
@@ -36,6 +32,7 @@ class UiMatchHistoryWindow(QMainWindow):
         self.isFirstTime = True
         self.result =[]
         
+        self.player = QSoundEffect()
         self.loadBaseUi()
         self.loadDatabase()
         self.loadHistory()

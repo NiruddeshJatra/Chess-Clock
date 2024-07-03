@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
-from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtMultimedia import QSoundEffect
 from Match_History_Window import UiMatchHistoryWindow
 import mysql.connector
 import sys
@@ -62,10 +62,7 @@ class UiStatsWindow(QMainWindow):
         super().__init__()
         self.name = name
         
-        self.player = QMediaPlayer()
-        self.audio_output = QAudioOutput()
-        self.player.setAudioOutput(self.audio_output)
-
+        self.player = QSoundEffect()
         self.loadBaseUi()
         self.loadDatabase()
         self.showProfileStats()        
