@@ -1,3 +1,4 @@
+import itertools
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -108,7 +109,7 @@ class UiStatsWindow(QMainWindow):
     def showProfileStats(self):
         self.c.execute("SELECT Username, Rating, Match_played, Won, Draw, Lost FROM profile WHERE Username = %s", (self.name,))
         self.result = self.c.fetchall()
-        
+
         self.profileLabel = QLabel("Profile")
         self.profileLabel.setContentsMargins(35, 5, 10, 0)
         font = QFont("Georgia Pro Black", 24)
@@ -116,42 +117,41 @@ class UiStatsWindow(QMainWindow):
         self.profileLabel.setFont(font)
         self.profileLabel.setStyleSheet("")
         self.generalLayout.addWidget(self.profileLabel)
-        
+
         self.gridLayout = QGridLayout()
         self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        
+
         self.headerCol = ["Name", "Rating", "Played", "Won", "Draw", "Lost"]
-        
-        for row in range(2):
-            for col in range(6):
-                self.label = QLabel()
-                self.label.setStyleSheet("""
+
+        for row, col in itertools.product(range(2), range(6)):
+            self.label = QLabel()
+            self.label.setStyleSheet("""
                     background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0, 99, 0, 255), stop:0.517045 rgba(213, 255, 148, 255), stop:0.994318 rgba(27, 125, 0, 255));
                     color: rgb(0, 34, 0);
                     """)
-                self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                
-                if col == 0:
-                    self.label.setFixedSize(150, 35)
-                else:
-                    self.label.setFixedSize(100, 35)
-                    
-                if row == 0:
-                    self.label.setText(self.headerCol[col])
-                    font = QFont("Castellar", 12)
-                    font.setBold(True)
-                    self.label.setFont(font)
-                else:
-                    font = QFont("Gill Sans Nova Light", 12)
-                    font.setBold(True)
-                    self.label.setFont(font)
-                    self.label.setText(str(self.result[0][col]))
-                    
-                self.gridLayout.addWidget(self.label, row, col)
-            
+            self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+            if col == 0:
+                self.label.setFixedSize(150, 35)
+            else:
+                self.label.setFixedSize(100, 35)
+
+            if row == 0:
+                self.label.setText(self.headerCol[col])
+                font = QFont("Castellar", 12)
+                font.setBold(True)
+                self.label.setFont(font)
+            else:
+                font = QFont("Gill Sans Nova Light", 12)
+                font.setBold(True)
+                self.label.setFont(font)
+                self.label.setText(str(self.result[0][col]))
+
+            self.gridLayout.addWidget(self.label, row, col)
+
         self.generalLayout.addLayout(self.gridLayout)
         
         
