@@ -27,8 +27,8 @@ class UiProfileWindow(QMainWindow):
         self.windowIcon(self)
         self.setStyleSheet("""
             background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(8, 109, 55, 255), stop:1 rgba(63, 206, 112, 255));
-			color: rgb(0, 34, 0);
-		""")
+			      color: rgb(0, 34, 0);
+		    """)
 
         self.centralwidget = QWidget(self)
         self.setCentralWidget(self.centralwidget)
@@ -68,19 +68,19 @@ class UiProfileWindow(QMainWindow):
         font = QFont("Algerian", 18)
         self.createButton.setFont(font)
         self.createButton.setStyleSheet("""
-			QPushButton {
-				background-color:rgb(169, 255, 8);
-				border: 1px solid rgb(85, 255, 127);
-				border-radius: 10px;
-				padding: 10px 20px;
+            QPushButton {
+                background-color:rgb(169, 255, 8);
+                border: 1px solid rgb(85, 255, 127);
+                border-radius: 10px;
+                padding: 10px 20px;
                 margin-left: 15px;
-				color: rgb(25, 33, 19);
-			}
-			QPushButton:hover {
-				background-color: #ffff00;
-				color: rgb(0, 0, 0);
-			}
-		""")
+                color: rgb(25, 33, 19);
+            }
+            QPushButton:hover {
+                background-color: #ffff00;
+                color: rgb(0, 0, 0);
+            }
+        """)
         
         self.createButton.enterEvent = lambda event: self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.createButton.leaveEvent = lambda event: self.setCursor(Qt.CursorShape.ArrowCursor)
@@ -89,15 +89,55 @@ class UiProfileWindow(QMainWindow):
         
         
     def loadDatabase(self):
-        self.mydb = mysql.connector.connect(
-            host = "localhost",
-            user = "root",
-            passwd = "password",
-            database = "chess_clock",
-        )
-        self.c = self.mydb.cursor()    
+        try:
+            self.mydb = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                passwd="password",
+                database="chess_clock",
+            )
+            self.c = self.mydb.cursor()
+            print("Database connection successful.")
+        except mysql.connector.Error as err:
+            print(f"Error connecting to the database: {err}")
         
         
+    def create_database_if_not_exists(self):
+        try:
+            # Check if the database exists
+            self.c.execute("SHOW DATABASES LIKE 'chess_clock';")
+            result = self.c.fetchone()
+            
+            # If the database doesn't exist, create it
+            if result is None:
+                self.c.execute("CREATE DATABASE chess_clock;")
+                print("Database 'chess_clock' created successfully.")
+            else:
+                print("Database was already created")
+                
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            
+            
+    def create_tables_if_not_exists(self):
+        try:
+            # Check if the 'profile' table exists
+            self.c.execute("""
+                CREATE TABLE IF NOT EXISTS profile (
+                    Username VARCHAR(255) PRIMARY KEY,
+                    Match_played INT DEFAULT 0,
+                    Won INT DEFAULT 0,
+                    Draw INT DEFAULT 0,
+                    Lost INT DEFAULT 0,
+                    Rating INT DEFAULT 1000
+                );
+            """)
+            print("Table 'profile' is ready.")
+
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+
+
     def addProfile(self):
         profileName = self.name.text().lower()
         
@@ -112,9 +152,11 @@ class UiProfileWindow(QMainWindow):
         
         else:
             self.loadDatabase()
+            self.create_database_if_not_exists()
+            self.create_tables_if_not_exists()
             self.c.execute("SELECT Username FROM profile")
             profiles = [profile[0] for profile in self.c.fetchall()]
-            
+            print(profiles)
             if profileName in profiles:
                 self.name.setStyleSheet("""
                     background-color:rgb(162, 241, 120);
@@ -123,17 +165,18 @@ class UiProfileWindow(QMainWindow):
                     border-radius: 5px;
                     color: rgb(25, 33, 19);
                 """)
-                
+                print(f"{profileName} already exists.")
                 self.showWarningMessageBox()
                 
             else:
-                self.c.execute("""
-                    INSERT INTO profile (Username, Match_played, Won, Draw, Lost, Rating)
-                    VALUES (%s, 0, 0, 0, 0, 1000)
-                    """, (profileName,)
-                    )
-                self.mydb.commit()
-                self.mydb.close()
+                try:
+                    self.c.execute("INSERT INTO profile (Username, Match_played, Won, Draw, Lost, Rating) VALUES (%s, 0, 0, 0, 0, 1000)", (profileName,))
+                    self.mydb.commit()
+                except mysql.connector.Error as err:
+                    print(f"Error: {err}")
+                finally:
+                    self.mydb.close()
+                    
                 self.hide()
         
         

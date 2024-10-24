@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import *
 import sys
 
 
-
 app = QApplication(sys.argv)
 mainWindow = UiMainWindow()
 mainWindow.show()
