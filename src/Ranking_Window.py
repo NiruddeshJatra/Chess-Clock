@@ -28,10 +28,9 @@ class UiRankingWindow(QMainWindow):
         icon.addPixmap(QPixmap("Icons/chess-clock.svg"))
         self.setWindowIcon(icon)
         self.setStyleSheet("""
-			background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(8, 109, 55, 255), stop:1 rgba(63, 206, 112, 255));
-			color: rgb(0, 34, 0);
-			"""
-        )
+          background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(8, 109, 55, 255), stop:1 rgba(63, 206, 112, 255));
+          color: rgb(0, 34, 0);
+        """)
         
         self.centralwidget = QWidget(self)
         self.centralwidget.setStyleSheet("")

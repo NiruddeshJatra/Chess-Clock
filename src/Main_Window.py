@@ -51,9 +51,9 @@ class UiMainWindow(QMainWindow):
         icon.addPixmap(QPixmap("Icons/chess-clock.svg"))
         self.setWindowIcon(icon)
         self.setStyleSheet("""
-			background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(8, 109, 55, 255), stop:1 rgba(63, 206, 112, 255));
-			color: rgb(0, 34, 0);
-		""")
+          background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(8, 109, 55, 255), stop:1 rgba(63, 206, 112, 255));
+          color: rgb(0, 34, 0);
+        """)
 
         self.centralwidget = QWidget(self)
         self.centralwidget.setStyleSheet("")
@@ -111,10 +111,10 @@ class UiMainWindow(QMainWindow):
         self.matchType.enterEvent = lambda event: self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.matchType.leaveEvent = lambda event: self.setCursor(Qt.CursorShape.ArrowCursor)
         self.matchType.setStyleSheet("""
-			border: 1px solid #98e820;
-			border-radius: 10px;
-			color: rgb(26, 35, 30)
-		""")
+          border: 1px solid #98e820;
+          border-radius: 10px;
+          color: rgb(26, 35, 30)
+        """)
         
         icon1 = QIcon()
         icon1.addPixmap(QPixmap("Icons/bullet.png"))
@@ -144,17 +144,17 @@ class UiMainWindow(QMainWindow):
         self.playButton.enterEvent = lambda event: self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.playButton.leaveEvent = lambda event: self.setCursor(Qt.CursorShape.ArrowCursor)
         self.playButton.setStyleSheet("""
-			QPushButton {
-				background-color:rgb(169, 255, 8);
-				border-radius: 10px;
-				padding: 10px 20px;
-				color: rgb(25, 33, 19);
-			}
-			QPushButton:hover {
-				background-color: #ffff00;
-				color: rgb(0, 0, 0);
-			}
-		""")
+          QPushButton {
+            background-color:rgb(169, 255, 8);
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: rgb(25, 33, 19);
+          }
+          QPushButton:hover {
+            background-color: #ffff00;
+            color: rgb(0, 0, 0);
+          }
+        """)
 
         self.shortcut = QShortcut(Qt.Key.Key_Return, self)
         self.shortcut.activated.connect(self.playButton.click)

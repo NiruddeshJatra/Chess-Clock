@@ -34,7 +34,6 @@ class UiTimerWindow(QMainWindow):
         self.timerInterval = 1000
         self.player1RemainingTime = self.time
         self.player2RemainingTime = self.time
-        self.player = QSoundEffect()
         
         self.loadBaseUi()
         self.showTimerDisplay()
@@ -136,15 +135,14 @@ class UiTimerWindow(QMainWindow):
         self.shortcut = QShortcut(Qt.Key.Key_Space, self)
         self.shortcut.activated.connect(self.pushButton.click)
         self.pushButton.setStyleSheet("""
-			QPushButton {
-				background-color: white;
-                border: 1px solid rgb(10, 10, 10);
-				border-radius: 10px;
-				padding: 10px 20px;
-				color: black;
-			}
-			"""
-        )
+          QPushButton {
+            background-color: white;
+                    border: 1px solid rgb(10, 10, 10);
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: black;
+          }
+			  """)
         self.pushButton.enterEvent = lambda event: self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.pushButton.leaveEvent = lambda event: self.setCursor(Qt.CursorShape.ArrowCursor)
         self.pushButton.clicked.connect(self.toggleTimer)
@@ -252,7 +250,7 @@ class UiTimerWindow(QMainWindow):
                     padding: 10px 20px;
                     color: white;
                     }
-			""")
+			      """)
 
         else:
             if self.time == 120:
@@ -281,13 +279,14 @@ class UiTimerWindow(QMainWindow):
                     padding: 10px 20px;
                     color: black;
                 }
-			""")
+			      """)
 
         self.count += 1
         self.updateBorder()
 
 
     def playSound(self, sound_file):
+        self.player = QSoundEffect()
         url = QUrl.fromLocalFile(sound_file)
         self.player.setSource(url)
         self.player.play()

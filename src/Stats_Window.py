@@ -86,8 +86,8 @@ class UiStatsWindow(QMainWindow):
         self.setWindowIcon(icon)
         self.setStyleSheet("""
             background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(8, 109, 55, 255), stop:1 rgba(63, 206, 112, 255));
-			color: rgb(0, 34, 0);
-		""")
+          color: rgb(0, 34, 0);
+        """)
 
         self.centralwidget = QWidget(self)
         self.setCentralWidget(self.centralwidget)
@@ -265,20 +265,20 @@ class UiStatsWindow(QMainWindow):
         font = QFont("Algerian", 12)
         self.matchHistoryButton.setFont(font)
         self.matchHistoryButton.setStyleSheet("""
-			QPushButton {
-				background-color:rgb(169, 255, 8);
-				border: 1px solid rgb(85, 255, 127);
-				border-radius: 10px;
-                margin-left: 220px;
-                margin-right: 220px;
-                margin-bottom: 25px;
-				padding: 10px 20px;
-				color: rgb(25, 33, 19);
-			}
-			QPushButton:hover {
-				background-color: #ffff00;
-				color: rgb(0, 0, 0);
-			}
+          QPushButton {
+            background-color:rgb(169, 255, 8);
+            border: 1px solid rgb(85, 255, 127);
+            border-radius: 10px;
+                    margin-left: 220px;
+                    margin-right: 220px;
+                    margin-bottom: 25px;
+            padding: 10px 20px;
+            color: rgb(25, 33, 19);
+          }
+          QPushButton:hover {
+            background-color: #ffff00;
+            color: rgb(0, 0, 0);
+          }
         """)
         
         self.matchHistoryButton.enterEvent = lambda event: self.setCursor(Qt.CursorShape.PointingHandCursor)
