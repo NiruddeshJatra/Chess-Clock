@@ -85,3 +85,4 @@ class UiCustomPromptWindow(QMainWindow):
         timeEntered = int(self.time.text())
         self.timeEntered.emit(timeEntered)
         self.hide()
+        

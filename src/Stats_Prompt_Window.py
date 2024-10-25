@@ -138,3 +138,4 @@ class UiStatsPromptWindow(QMainWindow):
         font.setBold(True)
         msg.setFont(font)
         msg.exec()
+        

@@ -54,3 +54,5 @@ class UiCongratulationWindow(QMainWindow):
         self.label.setFont(font)
         self.label.setText(f"Congratulations!\n{self.winner} Won\n{self.winningMethod}")
         self.label.setStyleSheet("background-color: transparent; text-align: center; padding: 45px 25px;")
+        
+        

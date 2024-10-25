@@ -209,4 +209,5 @@ class UiMainWindow(QMainWindow):
             if self.matchType.currentIndex() == 6:
                 self.customTimeWindow.hide()
             self.playerWindow = UiPlayerWindow(self.time)
-            self.playerWindow.show()            
+            self.playerWindow.show()    
+    
