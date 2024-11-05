@@ -49,7 +49,7 @@ class UiCongratulationWindow(QMainWindow):
         
     def showCongrats(self):
         self.label = QLabel(parent=self.centralwidget)
-        font = QFont("Sitka", 30)
+        font = QFont("Sitka", 28)
         font.setBold(True)
         self.label.setFont(font)
         self.label.setText(f"Congratulations!\n{self.winner} Won\n{self.winningMethod}")

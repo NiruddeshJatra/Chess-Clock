@@ -4,7 +4,7 @@ from PyQt6.QtGui import *
 from PyQt6.QtCore import *
 from PyQt6.QtMultimedia import QSoundEffect
 import sys
-import mysql.connector
+import pymysql
 
 
 
@@ -60,12 +60,11 @@ class UiMatchHistoryWindow(QMainWindow):
         
         
     def loadDatabase(self):
-        self.mydb = mysql.connector.connect(
+        self.mydb = pymysql.connect(
             host = "localhost",
             user = "root",
             passwd = "password",
             database = "chess_clock",
-            auth_plugin="mysql_native_password"
         )
         self.c = self.mydb.cursor()
         
@@ -119,7 +118,7 @@ class UiMatchHistoryWindow(QMainWindow):
                 font.setBold(True)
                 self.label.setFont(font)
             else:
-                font = QFont("Gill Sans Nova Light", 12)
+                font = QFont("Gill Sans Nova Book", 12)
                 font.setBold(True)
                 self.label.setFont(font)
                 self.label.setText(str(self.result[row-1][col]))

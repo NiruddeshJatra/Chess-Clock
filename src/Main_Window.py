@@ -122,7 +122,7 @@ class UiMainWindow(QMainWindow):
         self.matchType.addItem(icon1, " Bullet: 2|1 Min")
         
         icon2 = QIcon()
-        icon2.addPixmap(QPixmap("Icons/lightning.png"))
+        icon2.addPixmap(QPixmap("Icons/Bookning.png"))
         self.matchType.addItem(icon2, " Blitz: 3|2 Min")
         self.matchType.addItem(icon2, " Blitz: 5 Min")
         

@@ -4,7 +4,7 @@ from PyQt6.QtGui import *
 from PyQt6.QtCore import *
 from PyQt6.QtMultimedia import QSoundEffect
 from src.Match_History_Window import UiMatchHistoryWindow
-import mysql.connector
+import pymysql
 import sys
 
 
@@ -40,7 +40,7 @@ class ChessStatisticsBar(QWidget):
         painter.fillRect(self.xPos + 100 + width1 + width2, self.yPos + 20, width3, totalHeight, Qt.GlobalColor.red)
         
         # Draw text labels
-        font = QFont("Gill Sans Nova Light", 8)
+        font = QFont("Gill Sans Nova Book", 8)
         font.setBold(True)
         painter.setFont(font)
         painter.setPen(Qt.GlobalColor.black)
@@ -97,12 +97,11 @@ class UiStatsWindow(QMainWindow):
         
         
     def loadDatabase(self):
-        self.mydb = mysql.connector.connect(
+        self.mydb = pymysql.connect(
             host = "localhost",
             user = "root",
             passwd = "password",
             database = "chess_clock",
-            auth_plugin="mysql_native_password"
         )
         self.c = self.mydb.cursor()
         
@@ -146,7 +145,7 @@ class UiStatsWindow(QMainWindow):
                 font.setBold(True)
                 self.label.setFont(font)
             else:
-                font = QFont("Gill Sans Nova Light", 12)
+                font = QFont("Gill Sans Nova Book", 12)
                 font.setBold(True)
                 self.label.setFont(font)
                 self.label.setText(str(self.result[0][col]))

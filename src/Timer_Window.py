@@ -4,7 +4,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtMultimedia import QSoundEffect
 import sys
 from src.Congratulation_Window import UiCongratulationWindow
-import mysql.connector
+import pymysql
 
 
 
@@ -113,7 +113,7 @@ class UiTimerWindow(QMainWindow):
         
         self.player1Move = QLabel("Moves: 0", parent=self.centralwidget)
         self.player1Move.setGeometry(QRect(50, 250, 81, 16))
-        font = QFont("Segoe Pro Display SemiLight", 12)
+        font = QFont("Segoe Pro Display SemiBook", 12)
         self.player1Move.setFont(font)
         self.player1Move.setStyleSheet("background-color: transparent; color: white;")
         self.player1Move.setObjectName("player1Move")
@@ -334,12 +334,11 @@ class UiTimerWindow(QMainWindow):
                 
                 
     def loadDatabase(self):
-        self.mydb = mysql.connector.connect(
+        self.mydb = pymysql.connect(
             host = "localhost",
             user = "root",
             passwd = "password",
             database = "chess_clock",
-            auth_plugin="mysql_native_password"
         )
         self.c = self.mydb.cursor()
         

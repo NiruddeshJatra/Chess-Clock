@@ -4,7 +4,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtMultimedia import QSoundEffect
 import sys
 from src.Timer_Window import UiTimerWindow
-import mysql.connector
+import pymysql
 
 
 
@@ -114,12 +114,11 @@ class UiPlayerWindow(QMainWindow):
         
 
     def loadDatabase(self):
-        self.mydb = mysql.connector.connect(
+        self.mydb = pymysql.connect(
             host = "localhost",
             user = "root",
             passwd = "password",
             database = "chess_clock",
-            auth_plugin="mysql_native_password"
         )
         self.c = self.mydb.cursor()
             

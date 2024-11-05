@@ -3,7 +3,7 @@ from PyQt6.QtGui import *
 from PyQt6.QtCore import *
 from PyQt6.QtMultimedia import QSoundEffect
 import sys
-import mysql.connector
+import pymysql
 
 
 
@@ -89,12 +89,11 @@ class UiProfileWindow(QMainWindow):
         
         
     def loadDatabase(self):
-        self.mydb = mysql.connector.connect(
+        self.mydb = pymysql.connect(
             host="localhost",
             user="root",
             passwd="password",
             database="chess_clock",
-            auth_plugin="mysql_native_password"
         )
         self.c = self.mydb.cursor()
         
@@ -109,7 +108,7 @@ class UiProfileWindow(QMainWindow):
             if result is None:
                 self.c.execute("CREATE DATABASE chess_clock;")
                 
-        except mysql.connector.Error as err:
+        except pymysql.Error as err:
             print(f"Error: {err}")
             
             
@@ -127,7 +126,7 @@ class UiProfileWindow(QMainWindow):
                 );
             """)
 
-        except mysql.connector.Error as err:
+        except pymysql.Error as err:
             print(f"Error: {err}")
 
 
@@ -164,7 +163,7 @@ class UiProfileWindow(QMainWindow):
                 try:
                     self.c.execute("INSERT INTO profile (Username, Match_played, Won, Draw, Lost, Rating) VALUES (%s, 0, 0, 0, 0, 1000)", (profileName,))
                     self.mydb.commit()
-                except mysql.connector.Error as err:
+                except pymysql.Error as err:
                     print(f"Error: {err}")
                 finally:
                     self.mydb.close()
